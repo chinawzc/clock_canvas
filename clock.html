@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>clock</title>
+    <style>
+        #canvas {
+            border: 1px solid #00f;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="300" height="300">
+        您的浏览器不支持canvas
+    </canvas>
+    <script type="text/javascript">
+        var canvas = document.querySelector('#canvas');
+        canvas.width = 800;
+        canvas.height = 800;
+
+        if (canvas.getContext('2d')) {
+            var context = canvas.getContext('2d');
+
+            var k = 1;
+            drawclockstart();
+
+            setInterval(function() {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                drawclock();
+
+                context.save();
+                rot(k);
+                frect('rgb(20, 48, 236)',398.5, 220, 3, 180);
+                k = k + 1;
+                context.restore();
+
+                context.save();
+                var m = Math.floor(k / 60);
+                rot(m);
+                frect('rgb(28, 133, 92)',397, 250, 6, 150);
+                context.restore();
+
+                context.save();
+                var n = Math.floor(k / 720);
+                rot(n);
+                frect('rgb(200, 198, 20)',395, 280, 10, 120);
+                context.restore();
+            }, 50);
+
+
+
+
+
+
+            function rot(x) {
+                context.translate(400, 400);
+                context.rotate(6 * x * Math.PI / 180);
+                context.translate(-400, -400);
+            }
+
+            function drawclockstart() {
+                frect('rgb(20, 48, 236)',398.5, 220, 3, 180);
+                frect('rgb(28, 133, 92)',397, 250, 6, 150);
+                frect('rgb(200, 198, 20)',395, 280, 10, 120);
+                drawclock();
+            };
+
+            //指针
+            function frect(color,x,y,width,height){
+                context.fillStyle = color;
+                context.fillRect(x, y, width, height);
+            };
+
+
+            function drawclock() {
+                context.lineWidth = 3;
+                context.strokeStyle = '#0ff';
+                context.beginPath();
+                context.arc(400, 400, 250, 0, 2 * Math.PI);
+                context.closePath();
+                context.stroke();
+                context.beginPath();
+                context.arc(400, 400, 300, 0, 2 * Math.PI);
+                context.closePath();
+                context.stroke();
+                context.beginPath();
+                context.strokeStyle = 'rgb(133, 247, 5)';
+                context.fillStyle = 'rgb(133, 247, 5)';
+                context.arc(400, 400, 10, 0, 2 * Math.PI);
+                context.closePath();
+                context.fill();
+                context.stroke();
+
+                for (var i = 0; i < 60; i++) {
+                    if (i % 15 == 0) {
+                        kedu(10,'red',90,400,400,250,200,i);
+                    } else if (i % 5 == 0) {
+                        kedu(1,'red',30,400,400,250,200,i);
+                    } else {
+                        kedu(1,'red',6,400,400,250,240,i);
+                    }
+                }
+            }
+
+//表的刻度
+            function kedu(width,color,degx,x,y,R,r,n){
+                context.beginPath();
+                context.lineWidth = width;
+                context.strokeStyle = color;
+                var deg = 2 * Math.PI * degx * n / 360;
+                context.lineTo(x + R * Math.cos(deg), y + R * Math.sin(deg));
+                context.lineTo(x + r * Math.cos(deg), y + r * Math.sin(deg));
+                context.closePath();
+                context.stroke();
+            }
+
+        } else {
+            alert('您的浏览器不支持canvas');
+        }
+    </script>
+    
+</body>
+
+</html>
